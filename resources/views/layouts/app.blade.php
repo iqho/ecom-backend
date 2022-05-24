@@ -24,12 +24,14 @@
 
     <body>
         <!-- Navigation -->
-        @include('partials.side-navbar')
+        @auth
+            @include('partials.side-navbar')
+        @endauth
 
         <!-- Content -->
         <main>
             @include('partials.top-navbar')
-            <div class="p-4" style="z-index: -999">
+            <div class="p-4">
                 @yield('content')
             </div>
         </main>
