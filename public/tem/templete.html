@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>CodePen - Bootstrap 5 Dashboard Sidebar (No JQuery)</title>
+
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        />
+
+        <style>
+            body {
+                height: 100vh;
+                display: flex;
+                flex-direction: row;
+            }
+
+            aside {
+                width: 250px;
+                order: 1;
+            }
+            aside.shrink {
+                width: auto;
+            }
+
+            main {
+                order: 2;
+                width: 100%;
+                overflow-y: scroll;
+            }
+            main header {
+                height: 50px;
+            }
+            main header .navbar {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            main section {
+                height: 800px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Navigation -->
+        <aside
+            id="sidebar"
+            class="sidebar d-flex flex-column flex-shrink-0 p-3 border-end border-primary"
+        >
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fa-solid fa-house me-2 nav-link-icon"></i>
+                        <span class="nav-link-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-newspaper me-2 nav-link-icon"></i>
+                        <span class="nav-link-text">News</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i
+                            class="fa-regular fa-calendar me-2 nav-link-icon"
+                        ></i>
+                        <span class="nav-link-text">Events</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-regular fa-user me-2 nav-link-icon"></i>
+                        <span class="nav-link-text">Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-gear me-2 nav-link-icon"></i>
+                        <span class="nav-link-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav nav-pills d-flex">
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-toggle="sidebar-expand">
+                        <i
+                            class="fa-solid fa-angles-left me-2 nav-link-icon"
+                        ></i>
+                        <span class="nav-link-text">Collapse Menu</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Content -->
+        <main>
+            <header>
+                <nav class="navbar bg-light" style="border-bottom:1px solid #ccc; ">
+                    <button class="btn" type="button" data-toggle="sidebar-collapse">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand mx-auto" href="#" style="font-weight:bolder">
+                        Mbd24.com
+                    </a>
+                </nav>
+            </header>
+            <div class="p-4">
+                <section>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">News</div>
+                        </div>
+                        <div class="card-body">
+                            <div>Card content here</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.2/umd/popper.min.js"></script>
+
+        <script>
+            var sidebar = document.getElementById("sidebar");
+            var buttonSidebarCollapse = document.querySelector(
+                '[data-toggle="sidebar-collapse"]'
+            );
+            var buttonSidebarExpand = document.querySelector(
+                '[data-toggle="sidebar-expand"]'
+            );
+            var sidebarIconExpand =
+                buttonSidebarExpand.querySelector(".nav-link-icon");
+            var sidebarLinkTexts = sidebar.querySelectorAll(".nav-link-text");
+            var sidebarLinkIcons = sidebar.querySelectorAll(".nav-link-icon");
+
+            var boolSidebarShow = false;
+            var boolSidebarGrow = false;
+            var breakpoints = {
+                sm: 576,
+                md: 768,
+                lg: 992,
+                xl: 1200,
+                xxl: 1400,
+            };
+
+            buttonSidebarCollapse.addEventListener(
+                "click",
+                toggleSidebarCollapse
+            );
+            buttonSidebarExpand.addEventListener("click", toggleSidebarExpand);
+            window.addEventListener("resize", updateSidebarDisplay);
+
+            window.onload = function () {
+                updateSidebarDisplay();
+            };
+
+            function updateSidebarDisplay() {
+                windowWidth = window.innerWidth;
+
+                if (windowWidth <= breakpoints["sm"]) {
+                    /* Default to both minimized */
+                    sidebarHide();
+                    sidebarShrink();
+                }
+
+                if (
+                    windowWidth > breakpoints["sm"] &&
+                    windowWidth <= breakpoints["lg"]
+                ) {
+                    /* Small and medium devices show shrunk sidebar */
+                    sidebarShow();
+                    sidebarShrink();
+                }
+
+                if (windowWidth > breakpoints["lg"]) {
+                    /* Large devices and bigger show both */
+                    sidebarShow();
+                    sidebarGrow();
+                }
+            }
+
+            function toggleSidebarCollapse() {
+                boolSidebarShow ? sidebarHide() : sidebarShow();
+            }
+
+            function toggleSidebarExpand() {
+                boolSidebarGrow ? sidebarShrink() : sidebarGrow();
+            }
+
+            function sidebarHide() {
+                boolSidebarShow = false;
+                sidebar.classList.remove("d-flex");
+                sidebar.classList.add("d-none");
+            }
+
+            function sidebarShow() {
+                boolSidebarShow = true;
+                sidebar.classList.remove("d-none");
+                sidebar.classList.add("d-flex");
+            }
+
+            function sidebarShrink() {
+                boolSidebarGrow = false;
+                sidebarIconExpand.classList.remove("fa-angles-left");
+                sidebarIconExpand.classList.add("fa-angles-right");
+                sidebar.classList.add("shrink");
+                sidebarLinkTexts.forEach((text) => {
+                    text.classList.add("d-none");
+                });
+
+                sidebarLinkIcons.forEach((icon) => {
+                    icon.classList.remove("me-2");
+                });
+            }
+
+            function sidebarGrow() {
+                boolSidebarGrow = true;
+                sidebarIconExpand.classList.remove("fa-angles-right");
+                sidebarIconExpand.classList.add("fa-angles-left");
+                sidebar.classList.remove("shrink");
+                sidebarLinkTexts.forEach((text) => {
+                    text.classList.remove("d-none");
+                });
+
+                sidebarLinkIcons.forEach((icon) => {
+                    icon.classList.add("me-2");
+                });
+            }
+        </script>
+    </body>
+</html>
