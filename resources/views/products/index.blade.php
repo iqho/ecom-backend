@@ -15,7 +15,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h5>Products List</h5>
+                    <h4>Products List</h4>
                 </div>
                 <div class="card-body">
 
@@ -60,14 +60,23 @@
                                                 <small>No Image</small>
                                             @endif
                                         </td>
-                                        <td class="text-center">{{ $product->price }}</td>
                                         <td class="text-center">
-                                            {{ optional($product->category)->category_name ?? 'null' }}</td>
+                                            @forelse ($product->productPrices as $row)
+                                            <strong> @if ($row->priceType) {{ $row->priceType->name }} @else No Price Type @endif :
+                                                @if ($row->amount) {{ $row->amount }} @else No Price @endif</strong><br>
+                                                @if ($row->start_date) <small> Start From: {{ date('d F Y', strtotime($row->start_date)) }} </small> @endif
+                                            <hr class="g-0">
+                                            @empty
+                                                <small>No Price</small>
+                                            @endforelse
+                                        </td>
+                                        <td class="text-center">
+                                            {{ optional($product->category)->name }}</td>
                                         <td class="text-center">
                                             <form action="{{ route('products.changeStatus', $product->id) }}" method="post">
                                             @csrf
                                             @method('GET')
-                                            
+
                                                 @if ($product->is_active == 1)
                                                     <button type="submit" class="btn btn-success">Active</button>
                                                 @else

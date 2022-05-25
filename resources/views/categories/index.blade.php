@@ -15,7 +15,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h5>List of All Categories</h5>
+                    <h4>List of All Categories</h4>
                 </div>
                 <div class="card-body">
 
@@ -43,43 +43,54 @@
                         <table id="datatable" class="table table-bordered dt-responsive nowrap table-striped">
                             <thead>
                                 <tr>
-                                </tr>
                                 <th class="text-center">SL</th>
                                 <th>Name</th>
                                 <th>Slug</th>
+                                <th class="text-center no-sort">Image</th>
+                                <th class="text-center">CreatedBy</th>
                                 <th class="text-center no-sort">Active Status</th>
                                 <th class="text-center no-sort">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php $i =  count($categories); @endphp
                                 @foreach ($categories as $key => $category)
                                     <tr>
-                                        <td class="text-center">{{ ++$key }}</td>
+                                        <td class="text-center">{{ $i-- }}</td>
                                         <td>{{ $category->name }}</td>
                                         <td>{{ $category->slug }}</td>
                                         <td class="text-center">
-
-                                            @if ($category->is_active == 1)
-                                                <form action="{{ route('categories.changeStatus', $category->id) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('GET')
-
-                                                    <button type="submit" class="btn btn-success">Active</button>
-                                                </form>
+                                            @if ($category->image && (file_exists(public_path('category-images/'. $category->image ))))
+                                                <img src="{{ asset('category-images/'.$category->image) }}" height="50" width="60">
                                             @else
-                                                <form action="{{ route('categories.changeStatus', $category->id) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('GET')
-
-                                                    <button type="submit" class="btn btn-danger">Inactive</button>
-                                                </form>
+                                                <small>No Image</small>
                                             @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if(!empty($category->users->name))
+                                                {{ $category->users->name }}
+                                            @else
+                                                <span>No Creator Found</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <form action="{{ route('categories.changeStatus', $category->id)}}" method="post">
+                                                @csrf
+                                                @method('GET')
 
+                                                    @if ($category->is_active == 1)
+                                                        <button type="submit" class="btn btn-success">Active</button>
+                                                    @else
+                                                        <button type="submit" class="btn btn-danger">Inactive</button>
+                                                    @endif
+
+                                                </form>
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group" role="group">
+                                                <a href="{{ route('categories.show', $category->id) }}"
+                                                    class="btn btn-primary me-1"><i class="fa fa-eye"></i></a>
+
                                                 <a href="{{ route('categories.edit', $category->id) }}"
                                                     class="btn btn-info me-1"><i class="fa fa-edit"></i></a>
 
@@ -110,6 +121,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#datatable').DataTable({
+                order: [0,'desc'],
                 responsive: true,
                 columnDefs: [{
                     targets: 'no-sort',

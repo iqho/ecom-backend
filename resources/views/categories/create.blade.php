@@ -46,6 +46,18 @@
                             </div>
                         </div>
 
+                        <div class="row p-3">
+                            <label for="image" class="col-md-3 col-form-label">Image</label>
+                            <div class="col-md-7">
+                                <input type="file" id="image" class="form-control" value="{{ old('image') }}"
+                                    name="image">
+                            </div>
+                            <div class="col-md-2">
+                                <img id="preview-image-before-upload" src="{{ asset('assets/images/image-not-available.jpg') }}"
+                                alt="preview image" style="max-height: 60px; max-width:100px">
+                            </div>
+                        </div>
+
                         <div class="card-footer float-end">
                             <button type="submit" class="btn btn-primary">Add New Category</button>
                         </div>
@@ -55,3 +67,18 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script type="text/javascript">
+        // Upload Image Preview
+        $(document).ready(function (e) {
+            $('#image').change(function(){
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    $('#preview-image-before-upload').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
+        });
+    </script>
+@endpush

@@ -10,13 +10,13 @@
     </ul>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="{{ route('home') }}" class="nav-link active">
+            <a href="{{ route('home') }}" class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}">
                 <i class="fa-solid fa-house me-2 nav-link-icon"></i>
                 <span class="nav-link-text">Dashboard</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('categories.index') }}" class="nav-link">
+            <a href="{{ route('categories.index') }}" class="nav-link {{ Request::routeIs('categories.index') ? 'active' : '' }}">
                 <i class="fa-solid fa-newspaper me-2 nav-link-icon"></i>
                 <span class="nav-link-text">All Categories</span>
             </a>
@@ -29,7 +29,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('products.index') }}" class="nav-link">
+            <a href="{{ route('products.index') }}" class="nav-link {{ Request::routeIs('products.index') ? 'active' : '' }}">
                 <i class="fa-solid fa-newspaper me-2 nav-link-icon"></i>
                 <span class="nav-link-text">All Products</span>
             </a>

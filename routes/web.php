@@ -57,12 +57,11 @@ Route::group(['middleware' => ["auth:sanctum", "verified"]], function () {
 
         Route::get('/create', 'create')->name('create');
 
-        Route::get('/{priceType}', 'show')->name('show');
         Route::patch('/{priceType}', 'update')->name('update');
         Route::delete('/{priceType}', 'destroy')->name('destroy');
 
         Route::get('/{priceType}/edit', 'edit')->name('edit');
-        Route::get('/{priceType}/change-status', 'changeStatus')->name('changeStatus');
+        Route::get('/change-status', 'changeStatus')->name('changeStatus');
     });
 
 });

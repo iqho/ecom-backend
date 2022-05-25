@@ -7,13 +7,18 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 
 class CategoryController extends Controller
 {
 
+    private $_getColumns = (['id', 'name', 'slug', 'user_id', 'image', 'is_active']);
+
     public function index()
     {
-        $categories = Category::orderBy('id', 'ASC')->get(['id','name', 'slug', 'is_active']);
+        $categories = Category::with('users')->orderBy('id', 'ASC')->get($this->_getColumns);
+
         return view('categories.index', compact('categories'));
     }
 
@@ -22,20 +27,14 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:255|unique:categories',
-            'image' => 'image|mimes:jpg,jpeg,png|max:2048',
-            'is_active' => 'boolean'
-        ]);
-
         $imageName = NULL;
 
         if($request->hasFile('image')){
             $image = $request->file('image');
             $imageName = $this->_getFileName($image->getClientOriginalExtension());
-            $image->move(public_path('categry-images'), $imageName);
+            $image->move(public_path('category-images'), $imageName);
         }
 
         $category = new Category;
@@ -58,23 +57,16 @@ class CategoryController extends Controller
       return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+    public function update(CategoryUpdateRequest $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|max:255|unique:categories',
-            'image' => 'image|mimes:jpg,jpeg,png|max:2048',
-            'is_active' => 'boolean'
-        ]);
-
-
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = $this->_getFileName($image->getClientOriginalExtension());
-            $image->move(public_path('categry-images'), $imageName);
+            $image->move(public_path('category-images'), $imageName);
 
-            if ($product->image !== NULL) {
-                if (file_exists(public_path('categry-images/'. $product->image ))) {
-                    unlink(public_path('categry-images/'. $product->image ));
+            if ($category->image !== NULL) {
+                if (file_exists(public_path('category-images/'. $category->image ))) {
+                    unlink(public_path('category-images/'. $category->image ));
                 }
             }
 
@@ -92,11 +84,11 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
 
-        // $products = Product::where('category_id', $category->id)->count();
+        $products = Product::where('category_id', $category->id)->count();
 
-        // if($products > 0){
-        //     Product::where('category_id', $category->id)->update(['category_id' => 1]);
-        // }
+        if($products > 0){
+            Product::where('category_id', $category->id)->update(['category_id' => null]);
+        }
 
         $category->delete();
 
@@ -105,13 +97,7 @@ class CategoryController extends Controller
 
     public function changeStatus(Category $category)
     {
-        if ($category->is_active == 1){
-            $category->is_active = 0;
-        }
-        else {
-            $category->is_active = 1;
-        }
-
+        $category->is_active = !$category->is_active;
         $category->update();
 
         return redirect()->route('categories.index')->with('status','Category active status has been changed successfully !');

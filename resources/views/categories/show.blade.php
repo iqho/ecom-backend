@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Show Product')
+@section('title', 'Show Category Details')
 
 @section('content')
     <div class="row justify-content-center">
@@ -8,57 +8,66 @@
 
             <div class="row justify-content-center my-3 g-0">
                 <div class="col-12 text-end">
-                    <a href="{{ route('products.index') }}" class="btn btn-primary">Back to Home</a>
+                    <a href="{{ route('categories.index') }}" class="btn btn-primary">Back to All Categories</a>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header"><h3>Show Product Details</h3></div>
+                <div class="card-header">
+                    <h4>Show Category Details</h4>
+                </div>
 
                 <div class="card-body">
                     <div class="row p-1">
-                        <div class="col-3">
+                        <div class="col-2">
                             <strong>Name :</strong>
                         </div>
-                        <div class="col-9">
-                            {{ $product->name }}
+                        <div class="col-10">
+                            {{ $category->name }}
                         </div>
                     </div>
 
                     <div class="row p-1">
-                        <div class="col-3">
-                            <strong>Category Name :</strong>
+                        <div class="col-2">
+                            <strong>Slug :</strong>
                         </div>
-                        <div class="col-9">
-                            {{ optional($product->category)->category_name ?? 'null' }}
-                        </div>
-                    </div>
-
-                    <div class="row p-1">
-                        <div class="col-3">
-                            <strong>Price :</strong>
-                        </div>
-                        <div class="col-9">
-                            {{ $product->price }}
+                        <div class="col-10">
+                            {{ $category->slug }}
                         </div>
                     </div>
 
                     <div class="row p-1">
-                        <div class="col-3">
-                            <strong>Description :</strong>
+                        <div class="col-2">
+                            <strong>Status :</strong>
                         </div>
-                        <div class="col-9">
-                            {{ $product->description }}
+                        <div class="col-10">
+                            @if ($category['is_active'] == 1)
+                                Active
+                            @else
+                                Inactive
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-2">
+                            <strong>CreatedBy :</strong>
+                        </div>
+                        <div class="col-10">
+                            @if(!empty($category->users->name))
+                                {{ $category->users->name }}
+                            @else
+                                <span>No Creator Found</span>
+                            @endif
                         </div>
                     </div>
 
                     <div class="row p-1">
-                        <div class="col-3">
+                        <div class="col-2">
                             <strong>Image :</strong>
                         </div>
-                        <div class="col-9">
-                            @if ($product->image && (file_exists(public_path('product-images/'. $product->image ))))
-                                <img src="{{ asset('product-images/'.$product->image) }}" height="150" width="250">
+                        <div class="col-10">
+                            @if ($category->image && (file_exists(public_path('category-images/'. $category->image ))))
+                                <img src="{{ asset('category-images/'.$category->image) }}" height="150" width="250">
                             @else
                                 <small>No Image</small>
                             @endif
@@ -66,7 +75,7 @@
                     </div>
 
                 </div>
-            </div>  <!-- /.card -->
+            </div> <!-- /.card -->
         </div>
     </div>
 @endsection
