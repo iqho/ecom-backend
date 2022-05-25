@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-md-12  w-75">
+        <div class="col-md-12">
 
             <div class="row justify-content-center my-3 g-0">
                 <div class="col-12 text-end">
@@ -14,12 +14,12 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4>Show Category Details</h4>
+                    <h4 class="ps-4">Show Category Details</h4>
                 </div>
 
                 <div class="card-body">
                     <div class="row p-1">
-                        <div class="col-2">
+                        <div class="col-2 text-end">
                             <strong>Name :</strong>
                         </div>
                         <div class="col-10">
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="row p-1">
-                        <div class="col-2">
+                        <div class="col-2 text-end">
                             <strong>Slug :</strong>
                         </div>
                         <div class="col-10">
@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="row p-1">
-                        <div class="col-2">
+                        <div class="col-2 text-end">
                             <strong>Status :</strong>
                         </div>
                         <div class="col-10">
@@ -49,11 +49,11 @@
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col-2">
+                        <div class="col-2 text-end">
                             <strong>CreatedBy :</strong>
                         </div>
                         <div class="col-10">
-                            @if(!empty($category->users->name))
+                            @if (!empty($category->users->name))
                                 {{ $category->users->name }}
                             @else
                                 <span>No Creator Found</span>
@@ -62,12 +62,12 @@
                     </div>
 
                     <div class="row p-1">
-                        <div class="col-2">
+                        <div class="col-2 text-end">
                             <strong>Image :</strong>
                         </div>
                         <div class="col-10">
-                            @if ($category->image && (file_exists(public_path('category-images/'. $category->image ))))
-                                <img src="{{ asset('category-images/'.$category->image) }}" height="150" width="250">
+                            @if ($category->image && file_exists(public_path('category-images/' . $category->image)))
+                                <img src="{{ asset('category-images/' . $category->image) }}" height="150" width="250">
                             @else
                                 <small>No Image</small>
                             @endif

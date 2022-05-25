@@ -9,13 +9,13 @@
 
             <div class="row justify-content-center my-3 g-0">
                 <div class="col-12 text-end">
-                    <a class="btn btn-primary" href="{{ route('products.create') }}">Add New Product</a>
+                    <a class="btn btn-primary" href="{{ route('products.index') }}">All Products</a>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h4>Products List</h4>
+                    <h4>All Trashed Products List</h4>
                 </div>
                 <div class="card-body">
 
@@ -77,31 +77,22 @@
                                                 <small>No Price</small>
                                             @endforelse
                                         </td>
-                                        <td class="text-center">{{ $product->category->name ?? 'No Category' }}</td>
-                                        <td class="text-center">{{ $product->users->name ?? 'No Creator Found' }}</td>
+                                        <td class="text-center">{{ optional($product->category)->name }}</td>
+                                        <td class="text-center">{{ optional($product->users)->name }}</td>
                                         <td class="text-center">
-                                            <form action="{{ route('products.changeStatus', $product->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('GET')
-
                                                 @if ($product->is_active == 1)
-                                                    <button type="submit" class="btn btn-success">Active</button>
+                                                    <button type="button" class="btn btn-success">Active</button>
                                                 @else
-                                                    <button type="submit" class="btn btn-danger">Inactive</button>
+                                                    <button type="button" class="btn btn-danger">Inactive</button>
                                                 @endif
-
-                                            </form>
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('products.show', $product->id) }}"
-                                                    class="btn btn-primary me-1"><i class="fa fa-eye"></i></a>
 
-                                                <a href="{{ route('products.edit', $product->id) }}"
-                                                    class="btn btn-success me-1"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('products.trashedRestore', $product->id) }}"
+                                                    class="btn btn-success me-1" onclick="return confirm('Are you sure you want to Restore this product ?')"><i class="fas fa-redo"></i></a>
 
-                                                <form action="{{ route('products.destroy', $product->id) }}"
+                                                <form action="{{ route('products.forceDelete', $product->id) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')

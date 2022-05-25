@@ -3,9 +3,9 @@
 @section('title', 'All Price Types | Test Project March 2022')
 
 @section('content')
-    <div class="card mt-2 w-100 w-lg-75">
+    <div class="card mt-2">
         <div class="card-header">
-            <h3 class="d-inline-block">All Price Types</h3>
+            <h4 class="d-inline-block">All Price Types</h4>
             <a href="{{ route('priceType.create') }}" class="btn btn-success float-end">Create New Price Type</a>
         </div>
         <div class="card-body">
@@ -49,7 +49,7 @@
                                         <td>{{ $ptype->name }}</td>
                                         <td>{{ $ptype->slug }}</td>
                                         <td class="text-center">
-                                            @if(!empty($ptype->users->name))
+                                            @if (!empty($ptype->users->name))
                                                 {{ $ptype->users->name }}
                                             @else
                                                 <span>No Creator Found</span>
@@ -64,7 +64,7 @@
                                         <td style="max-width: 150px; text-align:right">
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route('priceType.edit', $ptype->id) }}"
-                                                    class="btn btn-info me-1"><i class="fa fa-edit"></i></a>
+                                                    class="btn btn-primary me-1"><i class="fa fa-edit"></i></a>
 
                                                 <form action="{{ route('priceType.destroy', $ptype->id) }}" method="post">
                                                     @csrf
@@ -107,7 +107,7 @@
                     },
                     success: function(data) {
                         $("#successMessage").html(data.success).show().delay(3000).fadeOut(
-                        400);;
+                            400);;
                     }
                 });
             })
@@ -116,7 +116,7 @@
         // Hide Flash Message After 5 Second
         $(document).ready(function() {
             $('#datatable').DataTable({
-                order: [0,'desc'],
+                order: [0, 'desc'],
                 responsive: true,
                 columnDefs: [{
                     targets: 'no-sort',

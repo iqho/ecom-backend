@@ -7,8 +7,8 @@ use App\Models\Category;
 use App\Models\PriceType;
 use Illuminate\Support\Str;
 use App\Models\ProductPrice;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 
@@ -23,6 +23,7 @@ class ProductController extends Controller
 
         return view('products.index', $viewBag);
     }
+
 
     public function create()
     {
@@ -182,14 +183,6 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $image = $product->image;
-
-        if($image){
-            if (file_exists(public_path('product-images/'. $product->image ))) {
-                unlink(public_path('product-images/'. $product->image ));
-            }
-        }
-
        $product->delete();
 
        return redirect()->route('products.index')->with('status','Product has been Deleted Successfully !');
@@ -207,6 +200,41 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('status','Product Active Status has been Changed Successfully !');
     }
+
+    public function trashedIndex()
+    {
+        $viewBag['products'] = Product::onlyTrashed()->idDescending()->get($this->_getColumns);
+
+        return view('products.trashed-index', $viewBag);
+    }
+
+    public function trashedRestore($id)
+    {
+        Product::onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->route('products.index')->with('status','Product has been Restore Successfully !');
+    }
+
+    public function forceDelete($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+
+        $image = $product->image;
+
+        if($image){
+            if (file_exists(public_path('product-images/'. $product->image ))) {
+                unlink(public_path('product-images/'. $product->image ));
+            }
+        }
+        $product->productPrices()->where('product_id', $product->id)->forceDelete();
+
+        $product->forceDelete();
+
+        return redirect()->route('products.index')->with('status','Product has been Parmanently Deleted Successfully !');
+    }
+
+    
+
 
     // Get Categories
     private function _getCategories(){

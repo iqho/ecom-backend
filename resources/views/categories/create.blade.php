@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="row justify-content-center">
-        <div class="col-md-12 w-75">
+        <div class="col-md-12">
 
             <div class="row justify-content-center my-3 g-0">
                 <div class="col-12 text-end">
@@ -20,7 +20,7 @@
                 <div class="card">
 
                     <div class="card-header">
-                        <h4 class="card-title">Add New Category</h4>
+                        <h4 class="text-center">Add New Category</h4>
                     </div>
 
                     <div class="card-body">
@@ -38,27 +38,27 @@
                         @endif
 
                         <div class="row p-3">
-                            <label for="category_name" class="col-md-3 col-form-label">Category Name</label>
-                            <div class="col-md-9">
-                                <input type="text" id="name" class="form-control"
-                                    value="{{ old('name') }}" name="name"
-                                    placeholder="Enter Category name" required autofocus>
+                            <label for="name" class="col-md-3 col-form-label text-end">Category Name</label>
+                            <div class="col-md-9 float-end">
+                                <input type="text" id="name" class="form-control" value="{{ old('name') }}" name="name"
+                                    placeholder="Enter Category Name" required autofocus>
                             </div>
                         </div>
 
                         <div class="row p-3">
-                            <label for="image" class="col-md-3 col-form-label">Image</label>
+                            <label for="image" class="col-md-3 col-form-label text-end">Category Image</label>
                             <div class="col-md-7">
                                 <input type="file" id="image" class="form-control" value="{{ old('image') }}"
                                     name="image">
                             </div>
                             <div class="col-md-2">
-                                <img id="preview-image-before-upload" src="{{ asset('assets/images/image-not-available.jpg') }}"
-                                alt="preview image" style="max-height: 60px; max-width:100px">
+                                <img id="preview-image-before-upload"
+                                    src="{{ asset('assets/images/image-not-available.jpg') }}" alt="preview image"
+                                    style="max-height: 60px; max-width:100px">
                             </div>
                         </div>
 
-                        <div class="card-footer float-end">
+                        <div class="card-footer bg-white text-center border-0">
                             <button type="submit" class="btn btn-primary">Add New Category</button>
                         </div>
                     </div>
@@ -71,8 +71,8 @@
 @push('scripts')
     <script type="text/javascript">
         // Upload Image Preview
-        $(document).ready(function (e) {
-            $('#image').change(function(){
+        $(document).ready(function(e) {
+            $('#image').change(function() {
                 let reader = new FileReader();
                 reader.onload = (e) => {
                     $('#preview-image-before-upload').attr('src', e.target.result);

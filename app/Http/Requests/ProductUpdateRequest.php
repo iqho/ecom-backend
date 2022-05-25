@@ -14,7 +14,10 @@ class ProductUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|max:255|unique:products,name,'.$this->product->id,
+            'image' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'category_id' => 'nullable',
+            'is_active' => 'boolean'
         ];
     }
 }

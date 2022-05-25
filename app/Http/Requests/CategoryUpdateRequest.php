@@ -15,7 +15,7 @@ class CategoryUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:categories,name,'.$this->category->id,
             'image' => 'image|mimes:jpg,jpeg,png|max:2048',
             'is_active' => 'boolean'
         ];

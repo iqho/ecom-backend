@@ -15,10 +15,10 @@ class ProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'required|max:255|unique:products',
+            'image' => 'image|mimes:jpg,jpeg,png|max:2048',
             'category_id' => 'nullable',
-            'is_active' => 'in:0,1',
+            'is_active' => 'boolean'
         ];
     }
 }

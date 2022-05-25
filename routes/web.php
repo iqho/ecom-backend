@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Product\ProductController;
@@ -31,6 +32,10 @@ Route::group(['middleware' => ["auth:sanctum", "verified"]], function () {
 
         Route::get('/{product}/edit', 'edit')->name('edit');
         Route::get('/{product}/change-status', 'changeStatus')->name('changeStatus');
+
+        Route::get('/trashed/index', 'trashedIndex')->name('trashedIndex');
+        Route::get('/trashed/{id}/restore', 'trashedRestore')->name('trashedRestore');
+        Route::delete('/trashed/{id}/force-delete', 'forceDelete')->name('forceDelete');
 
     });
 

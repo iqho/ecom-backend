@@ -35,14 +35,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('products.index') }}" class="nav-link">
+            <a href="{{ route('products.trashedIndex') }}" class="nav-link {{ Request::routeIs('products.trashedIndex') ? 'active' : '' }}">
                 <i class="fa-solid fa-newspaper me-2 nav-link-icon"></i>
                 <span class="nav-link-text">Trashed Products</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('priceType.index') }}" class="nav-link">
+            <a href="{{ route('priceType.index') }}" class="nav-link {{ Request::routeIs('priceType.index') ? 'active' : '' }}">
                 <i class="fa-regular fa-calendar me-2 nav-link-icon"></i>
                 <span class="nav-link-text">All Price Types</span>
             </a>
