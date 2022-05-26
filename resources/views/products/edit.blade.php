@@ -253,7 +253,7 @@
                 type: "POST",
                 dataType: "json",
                 cache: false,
-                url: "{{ url('product/price-list') }}/" + price_id,
+                url: "{{ url('products/product/price-list') }}/" + price_id,
                 data: {
                     'price_id': price_id,
                     '_token': token,

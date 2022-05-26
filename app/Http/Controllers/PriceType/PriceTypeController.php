@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\PriceType;
 
+use App\Models\Product;
 use App\Models\PriceType;
 use Illuminate\Support\Str;
+use App\Models\ProductPrice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PriceTypeStoreRequest;
@@ -59,6 +61,13 @@ class PriceTypeController extends Controller
 
     public function destroy(PriceType $priceType)
     {
+        $productPrice  = ProductPrice::withTrashed()->where('price_type_id', $priceType->id)->count();
+
+        if($productPrice > 0){
+            return redirect()->route('priceType.index')->with('errors', 'Product Price Type ID Use for '.$productPrice.' Products. Please Change Product Price Type from Related Products .');
+           // ProductPrice::where('price_type_id', $priceType->id)->update(['price_type_id' => null]);
+        }
+
         $priceType->delete();
 
         return redirect()->route('priceType.index')->with('success', 'Product Price Type Deleted Successfully.');
@@ -72,4 +81,28 @@ class PriceTypeController extends Controller
 
         return response()->json(['success' => 'Price Type Active Status Change Successfully.']);
     }
+
+    public function trashedIndex()
+    {
+        $priceTypes = PriceType::onlyTrashed()->idDescending()->get($this->_getColumns);
+
+        return view('price-types.trashed-index', compact('priceTypes'));
+    }
+
+    public function trashedRestore($id)
+    {
+        PriceType::onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->route('priceType.index')->with('status','Price Type has been Restore Successfully !');
+    }
+
+    public function forceDelete($id)
+    {
+        $priceType = PriceType::onlyTrashed()->findOrFail($id);
+
+        $priceType->forceDelete();
+
+        return redirect()->route('priceType.index')->with('status','Price Type has been Parmanently Deleted Successfully !');
+    }
+
 }

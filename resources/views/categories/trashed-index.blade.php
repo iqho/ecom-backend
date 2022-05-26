@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'All Categories')
+@section('title', 'All Trashed Categories')
 
 @section('content')
 
@@ -15,7 +15,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="text-center">List of All Categories</h4>
+                    <h4 class="text-center">List of All Trashed Categories</h4>
                 </div>
                 <div class="card-body">
 
@@ -75,35 +75,26 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <form action="{{ route('categories.changeStatus', $category->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('GET')
-
-                                                @if ($category->is_active == 1)
-                                                    <button type="submit" class="btn btn-success">Active</button>
-                                                @else
-                                                    <button type="submit" class="btn btn-danger">Inactive</button>
-                                                @endif
-
-                                            </form>
+                                            @if ($category->is_active == 1)
+                                                <span class="badge bg-success" style="padding:10px">Active</span>
+                                            @else
+                                            <span class="badge bg-danger p-1">Inactive</span>
+                                            @endif
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('categories.show', $category->id) }}"
-                                                    class="btn btn-primary me-1" title="Category Details"><i class="fa fa-eye"></i></a>
 
-                                                <a href="{{ route('categories.edit', $category->id) }}"
-                                                    class="btn btn-success me-1" title="Edit"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('categories.trashedRestore', $category->id) }}"
+                                                    class="btn btn-success me-1" title="Restore" onclick="return confirm('Are you sure you want to restore this category ?')"><i class="fa-solid fa-recycle"></i></a>
 
-                                                <form action="{{ route('categories.destroy', $category->id) }}"
+                                                <form action="{{ route('categories.forceDelete', $category->id) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
 
                                                     <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure want to move this category to trashed ?')" title="Move to Trashed">
-                                                        <i class="fa-solid fa-trash-arrow-up"></i></button>
+                                                        onclick="return confirm('Are you sure want to delete this category parmanently ?')" title="Delete Parmanently">
+                                                        <i class="fa-solid fa-trash-can"></i></button>
                                                 </form>
 
                                             </div>

@@ -33,6 +33,8 @@ Route::group(['middleware' => ["auth:sanctum", "verified"]], function () {
         Route::get('/{product}/edit', 'edit')->name('edit');
         Route::get('/{product}/change-status', 'changeStatus')->name('changeStatus');
 
+        Route::post('product/price-list/{price_id}', 'priceListDestroy'); // For Product Price List Delete
+
         Route::get('/trashed/index', 'trashedIndex')->name('trashedIndex');
         Route::get('/trashed/{id}/restore', 'trashedRestore')->name('trashedRestore');
         Route::delete('/trashed/{id}/force-delete', 'forceDelete')->name('forceDelete');
@@ -53,6 +55,10 @@ Route::group(['middleware' => ["auth:sanctum", "verified"]], function () {
         Route::get('/{category}/edit', 'edit')->name('edit');
         Route::get('/{category}/change-status', 'changeStatus')->name('changeStatus');
 
+        Route::get('/trashed/index', 'trashedIndex')->name('trashedIndex');
+        Route::get('/trashed/{id}/restore', 'trashedRestore')->name('trashedRestore');
+        Route::delete('/trashed/{id}/force-delete', 'forceDelete')->name('forceDelete');
+
     });
 
     Route::controller(PriceTypeController::class)->prefix('price-types')->as('priceType.')->group(function () {
@@ -67,6 +73,10 @@ Route::group(['middleware' => ["auth:sanctum", "verified"]], function () {
 
         Route::get('/{priceType}/edit', 'edit')->name('edit');
         Route::get('/change-status', 'changeStatus')->name('changeStatus');
+
+        Route::get('/trashed/index', 'trashedIndex')->name('trashedIndex');
+        Route::get('/trashed/{id}/restore', 'trashedRestore')->name('trashedRestore');
+        Route::delete('/trashed/{id}/force-delete', 'forceDelete')->name('forceDelete');
     });
 
 });

@@ -90,7 +90,7 @@
                                             <div class="btn-group" role="group">
 
                                                 <a href="{{ route('products.trashedRestore', $product->id) }}"
-                                                    class="btn btn-success me-1" onclick="return confirm('Are you sure you want to Restore this product ?')"><i class="fas fa-redo"></i></a>
+                                                    class="btn btn-success me-1" onclick="return confirm('Are you sure you want to Restore this product ?')" title="Restore"><i class="fa-solid fa-recycle"></i></a>
 
                                                 <form action="{{ route('products.forceDelete', $product->id) }}"
                                                     method="post">
@@ -98,8 +98,8 @@
                                                     @method('DELETE')
 
                                                     <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this product ?')"><i
-                                                            class="fa fa-trash"></i></button>
+                                                        onclick="return confirm('Are you sure you want to delete this product parmanently ?')" title="Parmanent Delete">
+                                                        <i class="fa-solid fa-trash-can"></i></button>
                                                 </form>
 
                                             </div>

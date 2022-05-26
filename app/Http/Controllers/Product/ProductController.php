@@ -188,6 +188,16 @@ class ProductController extends Controller
        return redirect()->route('products.index')->with('status','Product has been Deleted Successfully !');
     }
 
+    public function priceListDestroy($price_id)
+    {
+        $price = ProductPrice::find($price_id);
+        $price->delete();
+
+        return response()->json([
+            'success' => 'Product Price Deleted Successfully !'
+        ]);
+    }
+
     public function changeStatus(Product $product)
     {
         if ($product->is_active == 1){
@@ -232,9 +242,6 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('status','Product has been Parmanently Deleted Successfully !');
     }
-
-    
-
 
     // Get Categories
     private function _getCategories(){

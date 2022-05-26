@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'All Price Types | Test Project March 2022')
+@section('title', 'All Trashed Price Types')
 
 @section('content')
     <div class="card mt-2">
         <div class="card-header">
-            <h4 class="d-inline-block">All Price Types</h4>
+            <h4 class="d-inline-block">All Trashed Price Types</h4>
             <a href="{{ route('priceType.create') }}" class="btn btn-success float-end">Create New Price Type</a>
         </div>
         <div class="card-body">
@@ -17,12 +17,6 @@
                             <strong>{{ $message }}</strong>
                             <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    @endif
-                    @if ($message = Session::get('errors'))
-                    <div class="alert alert-danger alert-dismissible fade show p-2 m-3" role="alert">
-                        <strong>{{ $message }}</strong>
-                        <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
                     @endif
 
                     <div id="successMessage" class="alert alert-success alert-dismissible fade show p-2 text-center"
@@ -69,16 +63,16 @@
                                         </td>
                                         <td style="max-width: 150px; text-align:right">
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('priceType.edit', $ptype->id) }}"
-                                                    class="btn btn-primary me-1" title="Edit"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('priceType.trashedRestore', $ptype->id) }}"
+                                                        class="btn btn-success me-1" title="Restore" onclick="return confirm('Are you sure you want to restore this price type ?')"><i class="fa-solid fa-recycle"></i></a>
 
-                                                <form action="{{ route('priceType.destroy', $ptype->id) }}" method="post">
+                                                <form action="{{ route('priceType.forceDelete', $ptype->id) }}" method="post">
                                                     @csrf
                                                     @method('DELETE')
 
                                                     <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure want to move this Price Type to trashed ?')" title="Move to Trashed">
-                                                        <i class="fa-solid fa-trash-arrow-up"></i></button>
+                                                        onclick="return confirm('Are you sure want to delete this Price Type Parmanently ?')" title="Delete Parmanently">
+                                                        <i class="fa-solid fa-trash-can"></i></button>
                                                 </form>
 
                                             </div>

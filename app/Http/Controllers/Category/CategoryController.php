@@ -103,6 +103,38 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('status','Category active status has been changed successfully !');
     }
 
+    public function trashedIndex()
+    {
+        $viewBag['categories'] = Category::onlyTrashed()->idDescending()->get($this->_getColumns);
+
+        return view('categories.trashed-index', $viewBag);
+    }
+
+    public function trashedRestore($id)
+    {
+        Category::onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->route('categories.index')->with('status','Category has been Restore Successfully !');
+    }
+
+    public function forceDelete($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+
+        $image = $category->image;
+
+        if($image){
+            if (file_exists(public_path('category-images/'. $category->image ))) {
+                unlink(public_path('category-images/'. $category->image ));
+            }
+        }
+
+        $category->forceDelete();
+
+        return redirect()->route('categories.index')->with('status','Category has been Parmanently Deleted Successfully !');
+    }
+
+
     private function _getFileName($fileExtension){
 
         // Image name format is - p-05042022121515.jpg

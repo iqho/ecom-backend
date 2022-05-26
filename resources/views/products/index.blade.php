@@ -15,7 +15,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4>Products List</h4>
+                    <h4>All Products List</h4>
                 </div>
                 <div class="card-body">
 
@@ -96,10 +96,12 @@
                                         <td class="text-center">
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route('products.show', $product->id) }}"
-                                                    class="btn btn-primary me-1"><i class="fa fa-eye"></i></a>
+                                                    class="btn btn-primary me-1" title="Product Details"><i
+                                                        class="fa fa-eye"></i></a>
 
                                                 <a href="{{ route('products.edit', $product->id) }}"
-                                                    class="btn btn-success me-1"><i class="fa fa-edit"></i></a>
+                                                    class="btn btn-success me-1" title="Product Edit"><i
+                                                        class="fa fa-edit"></i></a>
 
                                                 <form action="{{ route('products.destroy', $product->id) }}"
                                                     method="post">
@@ -107,8 +109,9 @@
                                                     @method('DELETE')
 
                                                     <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this product ?')"><i
-                                                            class="fa fa-trash"></i></button>
+                                                        onclick="return confirm('Are you sure you want to move this product to trashed ?')"
+                                                        title="Move to Trash">
+                                                        <i class="fa-solid fa-trash-arrow-up"></i></button>
                                                 </form>
 
                                             </div>
