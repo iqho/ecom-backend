@@ -26,7 +26,6 @@
                             </div>
                         </div>
                     @endif
-
                     <div class="table-responsive">
                         <table id="datatable" class="table table-bordered dt-responsive nowrap">
                             <thead>
