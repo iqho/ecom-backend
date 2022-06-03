@@ -24,7 +24,7 @@ class AuthController extends Controller
         //     return response()->json($validator->errors());
         // }
         if ($validator->fails()) {
-            return response()->json(['isValid'=>false, 'errors'=>$validator->errors()]);
+            return response()->json(['isSuccessStatus'=>false, 'errors'=>$validator->errors()]);
         }
 
         $user = User::create([
@@ -43,7 +43,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password')))
         {
             //return response()->json(['message' => 'Unauthorized'], 401);
-            return response()->json(['isValid'=>false, 'message'=> 'Email and Password doesn\'t Match ! Please Check Email and Password !']);
+            return response()->json(['isSuccessStatus'=>false, 'message'=> 'Email and Password doesn\'t Match ! Please Check Email and Password !']);
         }
 
         $user = User::where('email', $request['email'])->firstOrFail();
