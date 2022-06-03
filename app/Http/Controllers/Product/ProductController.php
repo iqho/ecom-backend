@@ -24,7 +24,6 @@ class ProductController extends Controller
         return view('products.index', $viewBag);
     }
 
-
     public function create()
     {
         $categories = Category::where('is_active', 1)->Orderby('id', 'DESC')->get(['id', 'name']);
@@ -40,7 +39,7 @@ class ProductController extends Controller
 
             $imageName = null;
 
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = $this->_getFileName($image->getClientOriginalExtension());
                 $image->move(public_path('product-images'), $imageName);
@@ -59,6 +58,7 @@ class ProductController extends Controller
             $getAllPrices = $request->price;
             $price_type_id = $request->price_type_id;
             $start_date = $request->start_date;
+            $end_date = $request->end_date;
 
             $values = [];
 
@@ -68,13 +68,13 @@ class ProductController extends Controller
                     'amount' => $price,
                     'price_type_id' => $price_type_id[$index],
                     'start_date' => $start_date[$index],
+                    'end_date' => $end_date[$index],
                 ];
             }
 
-            if ( ($price !== NULL) && ($price_type_id[$index] !== NULL) ){
+            if (($price !== NULL) && ($price_type_id[$index] !== NULL)) {
                 $product->productPrices()->insert($values);
             }
-
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
 
@@ -83,7 +83,6 @@ class ProductController extends Controller
             } else {
                 return redirect()->back()->withErrors(['msg' => 'Unable to process request.Error:' . json_encode($e->getMessage(), true)]);
             }
-
         }
 
         return redirect()->route('products.index')->with('success', 'Product Created Successfully.');
@@ -115,8 +114,8 @@ class ProductController extends Controller
                 $image->move(public_path('product-images'), $imageName);
 
                 if ($product->image !== NULL) {
-                    if (file_exists(public_path('product-images/'. $product->image ))) {
-                        unlink(public_path('product-images/'. $product->image ));
+                    if (file_exists(public_path('product-images/' . $product->image))) {
+                        unlink(public_path('product-images/' . $product->image));
                     }
                 }
 
@@ -133,7 +132,7 @@ class ProductController extends Controller
             // Product Price Type Update
             $product_price_id = $request->product_price_id;
 
-            if($product_price_id){
+            if ($product_price_id) {
                 for ($i = 0; $i < count($product_price_id); $i++) {
 
                     $values = [
@@ -141,6 +140,7 @@ class ProductController extends Controller
                         'amount' => $request->amount[$i],
                         'price_type_id' => $request->price_type_id[$i],
                         'start_date' => $request->start_date[$i],
+                        'end_date' => $request->end_date[$i],
                     ];
 
                     $check_id = ProductPrice::find($product_price_id[$i]);
@@ -153,22 +153,21 @@ class ProductController extends Controller
 
             $price_type_new_id = $request->price_type_new_id;
 
-            if($price_type_new_id){
+            if ($price_type_new_id) {
                 for ($i = 0; $i < count($price_type_new_id); $i++) {
                     $values2 = [
                         'product_id' => $product->id,
                         'amount' => $request->new_amount[$i],
                         'price_type_id' => $request->price_type_new_id[$i],
                         'start_date' => $request->new_start_date[$i],
+                        'end_date' => $request->new_end_date[$i],
                     ];
 
-                    if ( ($request->new_amount[$i] !== NULL) && ($request->price_type_new_id[$i] !== NULL) ){
-                      $product->productPrices()->insert($values2);
+                    if (($request->new_amount[$i] !== NULL) && ($request->price_type_new_id[$i] !== NULL)) {
+                        $product->productPrices()->insert($values2);
                     }
                 }
             }
-
-
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1062) {
@@ -183,9 +182,9 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-       $product->delete();
+        $product->delete();
 
-       return redirect()->route('products.index')->with('status','Product has been Deleted Successfully !');
+        return redirect()->route('products.index')->with('status', 'Product has been Deleted Successfully !');
     }
 
     public function priceListDestroy($price_id)
@@ -200,7 +199,7 @@ class ProductController extends Controller
 
     public function changeStatus(Product $product)
     {
-        if ($product->is_active == 1){
+        if ($product->is_active == 1) {
             $product->is_active = 0;
         } else {
             $product->is_active = 1;
@@ -208,7 +207,7 @@ class ProductController extends Controller
 
         $product->update();
 
-        return redirect()->route('products.index')->with('status','Product Active Status has been Changed Successfully !');
+        return redirect()->route('products.index')->with('status', 'Product Active Status has been Changed Successfully !');
     }
 
     public function trashedIndex()
@@ -222,7 +221,7 @@ class ProductController extends Controller
     {
         Product::onlyTrashed()->findOrFail($id)->restore();
 
-        return redirect()->route('products.index')->with('status','Product has been Restore Successfully !');
+        return redirect()->route('products.index')->with('status', 'Product has been Restore Successfully !');
     }
 
     public function forceDelete($id)
@@ -231,28 +230,29 @@ class ProductController extends Controller
 
         $image = $product->image;
 
-        if($image){
-            if (file_exists(public_path('product-images/'. $product->image ))) {
-                unlink(public_path('product-images/'. $product->image ));
+        if ($image) {
+            if (file_exists(public_path('product-images/' . $product->image))) {
+                unlink(public_path('product-images/' . $product->image));
             }
         }
         $product->productPrices()->where('product_id', $product->id)->forceDelete();
 
         $product->forceDelete();
 
-        return redirect()->route('products.index')->with('status','Product has been Parmanently Deleted Successfully !');
+        return redirect()->route('products.index')->with('status', 'Product has been Parmanently Deleted Successfully !');
     }
 
     // Get Categories
-    private function _getCategories(){
+    private function _getCategories()
+    {
         return Category::active()->get(['id', 'name']);
     }
 
     // Get File Name
-    private function _getFileName($fileExtension){
+    private function _getFileName($fileExtension)
+    {
 
         // Image name format is - p-05042022121515.jpg
-        return 'p-'. date("dmYhis") . '.' . $fileExtension;
+        return 'p-' . date("dmYhis") . '.' . $fileExtension;
     }
-
 }

@@ -16,11 +16,15 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|same:password|min:8',
         ]);
 
-        if($validator->fails()){
-            return response()->json($validator->errors());
+        // if($validator->fails()){
+        //     return response()->json($validator->errors());
+        // }
+        if ($validator->fails()) {
+            return response()->json(['isValid'=>false, 'errors'=>$validator->errors()]);
         }
 
         $user = User::create([
@@ -38,7 +42,8 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->only('email', 'password')))
         {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            //return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['isValid'=>false, 'message'=> 'Email and Password doesn\'t Match ! Please Check Email and Password !']);
         }
 
         $user = User::where('email', $request['email'])->firstOrFail();
@@ -51,7 +56,7 @@ class AuthController extends Controller
     // method for user logout and delete token
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+       // auth()->user()->tokens()->delete();
 
         return [
             'message' => 'You have successfully logged out and the token was successfully deleted'

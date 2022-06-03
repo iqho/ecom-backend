@@ -71,6 +71,11 @@
                                                             {{ date('d F Y', strtotime($row->start_date)) }} <br>
                                                         </small>
                                                     @endif
+                                                    @if ($row->end_date)
+                                                        <small class="text-success"> End Time:
+                                                            {{ date('d F Y', strtotime($row->end_date)) }} <br>
+                                                        </small>
+                                                    @endif
                                                 </div>
                                             @empty
                                                 <small>No Price</small>
