@@ -55,11 +55,19 @@
         </li>
 
         <li class="nav-item">
+            <a href="{{ route('orders.index') }}" class="nav-link {{ Request::routeIs('orders.index') ? 'active' : '' }}">
+                <i class="fa-regular fa-user me-2 nav-link-icon"></i>
+                <span class="nav-link-text">All Orders</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="fa-regular fa-user me-2 nav-link-icon"></i>
                 <span class="nav-link-text">All Users</span>
             </a>
         </li>
+
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="fa-solid fa-gear me-2 nav-link-icon"></i>

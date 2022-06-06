@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\PriceType\PriceTypeController;
@@ -78,5 +79,17 @@ Route::group(['middleware' => ["auth:sanctum", "verified"]], function () {
         Route::get('/trashed/{id}/restore', 'trashedRestore')->name('trashedRestore');
         Route::delete('/trashed/{id}/force-delete', 'forceDelete')->name('forceDelete');
     });
+
+    Route::controller(OrderController::class)->prefix('orders')->as('orders.')->group(function () {
+
+        Route::get('/', 'index')->name('index');
+
+        Route::get('/{order}', 'show')->name('show');
+        Route::post('/{order}', 'update')->name('update');
+
+        Route::patch('/changeDeliveryStatus', 'changeDeliveryStatus')->name('changeDeliveryStatus');
+
+    });
+
 
 });

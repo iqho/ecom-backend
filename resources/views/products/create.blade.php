@@ -86,9 +86,15 @@
                         </div>
 
                         <div class="col-12 col-md-4 g-0" style="padding-right:5px!important">
-                            <label for="active_date" class="form-label">Price Start From</label>
+                            <label for="start_date" class="form-label">Price Start From</label>
                             <input type="date" class="form-control" name="start_date[]" value="{{ date('Y-m-d') }}"
                                 id="start_date">
+                        </div>
+
+                        <div class="col-12 col-md-4 g-0" style="padding-right:5px!important">
+                            <label for="end_date" class="form-label">Price End Date</label>
+                            <input type="date" class="form-control" name="end_date[]" value="{{ date('Y-m-d') }}"
+                                id="end_date">
                         </div>
 
                         <div class="col-12 col-md-2 d-flex align-items-end g-0">
@@ -136,6 +142,12 @@
 
             <div class="col-12 col-md-4 g-0" style="padding-right:5px!important">
                 <input type="date" class="form-control" name="start_date[]" value="{{ date('Y-m-d') }}" id="start_date">
+            </div>
+
+            <div class="col-12 col-md-4 g-0" style="padding-right:5px!important">
+                <label for="end_date" class="form-label">Price End Date</label>
+                <input type="date" class="form-control" name="end_date[]" value="{{ date('Y-m-d') }}"
+                id="end_date">
             </div>
 
             <div class="col-md-2 col-12 d-flex align-items-end g-0">

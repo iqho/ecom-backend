@@ -30,7 +30,7 @@ return new class extends Migration
             $table->decimal('grand_total', 10, 2);
 
             $table->tinyInteger('payment_method'); // COD, Mobile Banking, Bank Debit/Credit Card
-            $table->tinyInteger('payment_status'); // Paid, Unpaid, Partials
+            $table->tinyInteger('payment_status')->default(1); // Paid, Unpaid, Partials
 
             $table->timestamps();
             $table->softDeletesTz('deleted_at', 0);
