@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
@@ -13,9 +14,11 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category', 'productPrices')->idDescending()->get($this->_getColumns);
+        $categories = Category::with('products')->get();
 
         return response()->json([
-            'product' => $products
+            'product' => $products,
+            'categories' => $categories
         ], 200);
     }
 
@@ -25,6 +28,15 @@ class ProductController extends Controller
         return response()->json([
             'message' => "Product Showed Successfully!!",
             'product' => $product
+        ], 200);
+    }
+
+    public function getSingleCategory(Category $category)
+    {
+        $category = Category::with('products')->find($category->id);
+        return response()->json([
+            'message' => "Category Showed Successfully!!",
+            'category' => $category
         ], 200);
     }
 }

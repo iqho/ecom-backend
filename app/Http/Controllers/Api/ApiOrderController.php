@@ -12,12 +12,12 @@ use Illuminate\Database\QueryException;
 
 class ApiOrderController extends Controller
 {
-  // private $_getColumns = (['id', 'name', 'slug', 'image', 'description', 'is_active']);
+    private $_getColumns = (['id', 'category_id', 'name', 'slug', 'image', 'description', 'is_active']);
 
     public function index()
     {
-        $orders = Order::with('orderDetails')->get();
-        $products = Product::get(['id','name','image']);
+        $orders = Order::with('orderDetails')->get($this->_getColumns);
+        $products = Product::get(['id', 'name', 'image']);
 
         return response()->json([
             'orders' => $orders,
@@ -29,16 +29,22 @@ class ApiOrderController extends Controller
     {
         //return $request->all();
         try {
-            DB::transaction(function () use($request)
-            {
-                $shipping = $request->shippingUserName.'<br>'.$request->shipping_address;
-                $billing = $request->billingUserName.'<br>'.$request->billing_address;
+            DB::transaction(function () use ($request) {
+                $shipping = $request->shippingUserName . '<br>' . $request->shipping_address;
+                $billing = $request->billingUserName . '<br>' . $request->billing_address;
+
+                $orderNumber = random_int(100000,999999);
+
+                while(Order::where('order_number', $orderNumber)->exists())
+                {
+                    $orderNumber++;
+                }
 
                 $order = new Order;
 
                 $order->user_id = 1;
                 $order->order_status_id = 1;
-                $order->order_number = random_int(100000,999999);
+                $order->order_number = $orderNumber;
                 $order->shipping_address = $shipping;
                 $order->billing_address = $billing;
                 $order->promo_discount_amount = $request->promo_discount_amount;
@@ -51,14 +57,14 @@ class ApiOrderController extends Controller
 
                 $order->save();
 
-                $getAllPrices = $request->prices;
+                $all_prices = $request->prices;
                 $product_names = $request->product_names;
                 $quantities = $request->quantity;
 
                 $cartItems = [];
 
-                if(($getAllPrices !== NULL) && ($product_names !== NULL)){
-                    foreach ($getAllPrices as $index => $price) {
+                if (($all_prices !== NULL) && ($product_names !== NULL)) {
+                    foreach ($all_prices as $index => $price) {
                         $cartItems[] = [
                             'order_id' => $order->id,
                             'product_name' => $product_names[$index],
@@ -68,12 +74,11 @@ class ApiOrderController extends Controller
                     }
                 }
 
-                if ( ($price !== NULL) && ($product_names[$index] !== NULL) ){
+                if ($cartItems[$index]) {
                     $orderDetails = new OrderDetails;
                     $orderDetails->insert($cartItems);
                 }
             });
-
         } catch (QueryException $e) {
             return response()->json(['status' => $e->getMessage()]);
         }
